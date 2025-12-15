@@ -1,0 +1,94 @@
+<view class="container">
+  <!-- 顶部 Banner 背景 -->
+  <view class="banner-area">
+    <image class="banner-img" src="https://img.yzcdn.cn/vant/cat.jpeg" mode="aspectFill"></image> <!-- 占位图 -->
+    <view class="privacy-tag">隐私政策 ></view>
+  </view>
+
+  <!-- 悬浮卡片区 -->
+  <view class="card-container">
+    <!-- 用户信息卡 -->
+    <view class="user-card">
+      <view class="user-row">
+        <view class="user-left">
+          <image class="avatar" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
+          <text class="username">肯德基网友 ></text>
+        </view>
+        <view class="user-actions">
+          <view class="action-item">
+            <text class="icon">🏁</text>
+            <text>会员码</text>
+          </view>
+          <view class="action-item">
+            <text class="icon">👛</text>
+            <text>卡包</text>
+          </view>
+          <view class="action-item">
+            <text class="icon">📋</text>
+            <text>订单</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 门店信息 -->
+      <view class="store-info-row">
+        <view class="store-text">
+          <view class="store-title">
+            <text class="store-name">爱华广场餐厅</text>
+            <text class="arrow-down">▼</text>
+          </view>
+          <text class="store-address">跃进路36号爱华广场3号商场首层</text>
+          <text class="store-hours">营业时间: 24小时</text>
+          <view class="store-tags">
+            <text class="tag">宠物餐厅</text>
+            <text class="tag">24小时</text>
+            <text class="tag">洗手间</text>
+          </view>
+        </view>
+        <view class="store-img-wrap">
+          <image class="store-img" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
+          <text class="img-count">1/2 ></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 开始点餐按钮 -->
+    <view class="order-btn-area">
+      <button class="start-order-btn" bindtap="goToMenu">
+        <text class="btn-icon">🍴</text>
+        <view class="btn-text">
+          <text class="main-text">开始点餐</text>
+          <text class="sub-text">Order Now</text>
+        </view>
+      </button>
+    </view>
+
+    <!-- 底部大神卡广告 -->
+    <view class="promo-section">
+      <view class="promo-title">大神卡·早餐两件套6折起</view>
+      <view class="promo-cards">
+        <view class="promo-card">
+          <image class="food-img" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
+          <view class="promo-info">
+            <text class="food-name">乳酪花生云朵...</text>
+            <text class="vip-price">¥8.3</text>
+            <text class="orig-price">¥24.9</text>
+            <button class="add-mini">+</button>
+          </view>
+        </view>
+        <view class="promo-card">
+          <image class="food-img" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
+          <view class="promo-info">
+            <text class="food-name">芝士猪柳帕尼...</text>
+            <text class="vip-price">¥9.6</text>
+            <text class="orig-price">¥26</text>
+            <button class="add-mini">+</button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="footer-text">已经到底部了</view>
+  </view>
+</view>
+

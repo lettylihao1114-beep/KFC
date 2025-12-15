@@ -1,0 +1,105 @@
+<view class="container">
+  <!-- 自定义顶部栏 -->
+  <view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-row">
+      <view class="back-btn" bindtap="goBack">
+        <text class="arrow-left">‹</text>
+      </view>
+      <view class="search-bar">
+        <text class="search-icon">🔍</text>
+        <text class="search-text">搜一搜你想吃的</text>
+      </view>
+      <view class="together-btn">
+        <text>拼</text> 一起点
+      </view>
+      <view class="more-btn">•••</view>
+    </view>
+  </view>
+
+  <!-- 门店信息 -->
+  <view class="store-header">
+    <view class="store-row">
+      <view class="store-name-wrap">
+        <text class="store-icon">🏢</text>
+        <text class="store-name">爱华广场餐厅</text>
+        <text class="arrow-down">▼</text>
+      </view>
+      <button class="reserve-btn">预约</button>
+    </view>
+    <view class="store-meta">
+      <text class="tag">自取</text>
+      <text class="address">跃进路36号爱华广场...</text>
+      <text class="distance">2.6km</text>
+    </view>
+    <view class="menu-tabs">
+      <text class="tab active">经典菜单</text>
+      <text class="tab">大神卡</text>
+      <text class="tag-red">专享</text>
+    </view>
+  </view>
+
+  <!-- 绿色提示条 -->
+  <view class="tips-bar">
+    <text>🍃 珍惜粮食 按需点餐 🍃</text>
+  </view>
+
+  <!-- 菜单主体 -->
+  <view class="menu-body">
+    <!-- 左侧分类 -->
+    <scroll-view scroll-y class="sidebar">
+      <block wx:for="{{categories}}" wx:key="id">
+        <view class="category-item {{activeCategory === index ? 'active' : ''}}" 
+              bindtap="switchCategory" 
+              data-index="{{index}}">
+          <view wx:if="{{item.icon}}" class="cat-icon">{{item.icon}}</view>
+          <text>{{item.name}}</text>
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 右侧列表 -->
+    <scroll-view scroll-y class="content" scroll-into-view="{{toView}}" scroll-with-animation>
+      <block wx:for="{{menuData}}" wx:key="id" wx:for-item="cat">
+        <view class="cat-header" id="category-{{cat.id}}">{{cat.category}}</view>
+        <block wx:for="{{cat.items}}" wx:key="id" wx:for-item="dish">
+          <view class="dish-card">
+            <image class="dish-img" src="{{dish.image}}" mode="aspectFill"></image>
+            <view class="dish-info">
+              <view class="dish-title-row">
+                <text class="dish-name">{{dish.name}}</text>
+              </view>
+              <text class="dish-sub">{{dish.sub}}</text>
+              <view class="price-row">
+                <view class="price-wrap">
+                  <text class="price-strike">¥{{dish.originalPrice}}</text>
+                  <text class="price-real">¥<text class="price-big">{{dish.price}}</text>起</text>
+                </view>
+                <button class="spec-btn" bindtap="showSpec" data-item="{{dish}}">选规格</button>
+              </view>
+              <view wx:if="{{dish.tag}}" class="vip-tag">
+                <text class="crown">👑</text> {{dish.tag}}
+              </view>
+            </view>
+          </view>
+        </block>
+      </block>
+      <view class="spacer"></view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部购物车 -->
+  <view class="cart-bar">
+    <view class="cart-left">
+      <view class="cart-icon-box">
+        <image class="cart-bag" src=""></image>
+      </view>
+      <text class="empty-text">未选购餐品</text>
+    </view>
+    <view class="coupon-helper">
+      <view class="coupon-text">
+        <text>优惠助手</text>
+        <text class="coupon-count">10 张卡券</text>
+      </view>
+    </view>
+  </view>
+</view>

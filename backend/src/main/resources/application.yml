@@ -1,0 +1,8 @@
+# application.yml
+spring:
+  profiles:
+    active: dev  # <--- 加这一行，表示激活 application-dev.yml
+  application:
+    name: kfc-backend
+
+# 这里面不要写 datasource 的具体账号密码了，删掉或留空

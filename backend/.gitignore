@@ -1,0 +1,50 @@
+HELP.md
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+/src/main/resources/application-dev.yml
+.classpath
+.project
+.settings
+.springBeans
+.sts4-cache
+/bin/
+!/src/test/**/bin/
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+application-dev.yml
+# 忽略 Node.js 依赖 (千万别上传这个)
+**/node_modules/
+node_modules/
+npm-debug.log

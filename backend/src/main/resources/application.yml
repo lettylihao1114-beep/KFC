@@ -1,8 +1,22 @@
-# application.yml
+server:
+  port: 8080
+
 spring:
-  profiles:
-    active: dev  # <--- 加这一行，表示激活 application-dev.yml
   application:
     name: kfc-backend
+  profiles:
+    active: dev  # 👈 这里激活 dev 环境，系统会自动去读 application-dev.yml
 
-# 这里面不要写 datasource 的具体账号密码了，删掉或留空
+# MyBatis Plus 全局配置 (驼峰命名、日志打印)
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 接口文档配置 (SpringDoc)
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    path: /v3/api-docs

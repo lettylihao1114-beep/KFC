@@ -1,0 +1,12 @@
+### 测试下单
+POST http://localhost:8080/order/create
+Content-Type: application/json
+
+{
+  "customerName": "饿了的同学",
+  "totalPrice": 58.5
+}
+
+### 测试支付接口 (把下面的数字换成你刚才生成的订单号)
+POST http://localhost:8080/order/pay?orderId=2000735664692338689
+Content-Type: application/json

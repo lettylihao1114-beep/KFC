@@ -1,0 +1,59 @@
+POST http://localhost:8080/order/pay?orderId=2000735664692338689
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-12-16T091722-1.200.txt
+
+###
+
+POST http://localhost:8080/order/create
+Content-Type: application/json
+Content-Length: 61
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "customerName": "饿了的同学",
+  "totalPrice": 58.5
+}
+
+<> 2025-12-16T091722.200.txt
+
+###
+
+POST http://localhost:8080/order/create
+Content-Type: application/json
+Content-Length: 61
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "customerName": "饿了的同学",
+  "totalPrice": 58.5
+}
+
+<> 2025-12-16T091209.200.txt
+
+###
+
+POST http://localhost:8080/order/create
+Content-Type: application/json
+Content-Length: 61
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "customerName": "饿了的同学",
+  "totalPrice": 58.5
+}
+
+<> 2025-12-16T091051.500.json
+
+###
+

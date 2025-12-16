@@ -1,12 +1,33 @@
 package com.kfc.backend.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 import java.math.BigDecimal;
+import java.util.List;
 
-//@Data // 自动生成 Getter/Setter
-@TableName("product") // 告诉 Java 这对应数据库里的 'product' 表
+/**
+ * 修复版：手动加上了 Getter/Setter，防止 Lombok 不生效报错
+ */
+@TableName("product")
 public class Product {
+    private Long id;
+    private String name;
+    private BigDecimal price;
+    private String description;
+
+    // --- 新增字段 ---
+    private Long categoryId; // 所属分类
+    private String image;    // 图片
+    private Integer status;  // 1:起售 0:停售
+
+    // --- 扩展字段 ---
+    @TableField(exist = false)
+    private List<ProductFlavor> flavors; // 商品的口味列表
+
+    // ==========================================
+    // 👇 下面是手写的 Getter 和 Setter 方法
+    // ==========================================
+
     public Long getId() {
         return id;
     }
@@ -31,6 +52,22 @@ public class Product {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public String getImage() {
         return image;
     }
@@ -47,9 +84,11 @@ public class Product {
         this.status = status;
     }
 
-    private Long id;
-    private String name;
-    private BigDecimal price;
-    private String image;
-    private Integer status;
+    public List<ProductFlavor> getFlavors() {
+        return flavors;
+    }
+
+    public void setFlavors(List<ProductFlavor> flavors) {
+        this.flavors = flavors;
+    }
 }

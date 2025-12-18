@@ -48,7 +48,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.19.4",
+  "libVersion": "3.12.1",
   "appid": "wx76ab8aa3f267627f",
   "projectname": "ordering-system",
   "isGameTourist": false,

@@ -1,7 +1,3 @@
--- Create and select database
-CREATE DATABASE IF NOT EXISTS kfc_ordering DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE kfc_ordering;
-
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: kfc_ordering
@@ -139,7 +135,7 @@ CREATE TABLE `orders` (
   `status` tinyint(1) DEFAULT '0' COMMENT '状态: 0待支付, 1已支付',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2000736978319003651 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2001104113432043522 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +144,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (2000735664692338689,'饿了的同学',58.50,1,'2025-12-16 09:12:09'),(2000736978319003650,'饿了的同学',58.50,0,'2025-12-16 09:17:22');
+INSERT INTO `orders` VALUES (2000735664692338689,'饿了的同学',58.50,1,'2025-12-16 09:12:09'),(2000736978319003650,'饿了的同学',58.50,0,'2025-12-16 09:17:22'),(2001104113432043521,'微信用户',177.60,0,'2025-12-17 09:36:14');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,6 +202,35 @@ LOCK TABLES `product_flavor` WRITE;
 INSERT INTO `product_flavor` VALUES (1,201,'饮料选择','[\"百事可乐\", \"七喜\", \"柠檬红茶\"]'),(2,201,'辣度选择','[\"不辣\", \"微辣\"]');
 /*!40000 ALTER TABLE `product_flavor` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `openid` varchar(64) DEFAULT NULL COMMENT '微信OpenID (唯一标识)',
+  `nickname` varchar(64) DEFAULT NULL COMMENT '微信昵称',
+  `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `avatar` varchar(500) DEFAULT NULL COMMENT '头像',
+  `is_vip` int DEFAULT '0' COMMENT '身份：0-普通用户，1-大神卡(金卡)用户',
+  `balance` decimal(10,2) DEFAULT '0.00' COMMENT '余额',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='C端顾客表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,NULL,'普通食客小王',NULL,NULL,0,0.00),(2,NULL,'尊贵金卡老李',NULL,NULL,1,0.00);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -216,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-16 11:07:27
+-- Dump completed on 2025-12-18 19:45:11

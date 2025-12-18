@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/category/**",
                         "/banner/**",       // 👈 【新增】必须加这一行，允许游客看轮播图
                         "/order/**",
+                        "/user/**",
 
                         // --- Swagger 文档相关 (漏了哪个都打不开) ---
                         "/doc.html",

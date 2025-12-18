@@ -22,21 +22,26 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**")  // 1. 默认拦截所有路径
-                .excludePathPatterns(    // 2. 放行以下白名单：
+                .addPathPatterns("/**")
+                .excludePathPatterns(
                         "/auth/login",
                         "/product/list",
                         "/category/**",
-                        "/banner/**",       // 👈 【新增】必须加这一行，允许游客看轮播图
-                        "/order/**",
-                        "/user/**",
+                        "/banner/**",
+                        "/shop/**",  // 放行店铺信息接口
+                        // 👇👇👇 新增放行这两行 👇👇👇
+                        "/user/**",       // 放行用户登录、查卡包
+                        "/order/user/list", // 放行查历史订单
 
-                        // --- Swagger 文档相关 (漏了哪个都打不开) ---
+                        "/order/create",  // 如果允许未登录下单也可以放行(看需求)
+                        "/order/pay",
+
+                        // Swagger 相关
                         "/doc.html",
-                        "/swagger-ui.html",     // 👈 【重点修复】Swagger 首页
-                        "/swagger-ui/**",       // Swagger 静态资源
-                        "/v3/api-docs/**",      // 接口数据源
-                        "/webjars/**"           // 某些版本的 Swagger 依赖这个
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/webjars/**"
                 );
     }
 }

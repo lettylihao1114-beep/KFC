@@ -129,13 +129,21 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '订单号',
-  `customer_name` varchar(64) DEFAULT NULL COMMENT '顾客昵称',
-  `total_price` decimal(10,2) DEFAULT NULL COMMENT '订单总金额',
-  `status` tinyint(1) DEFAULT '0' COMMENT '状态: 0待支付, 1已支付',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `number` varchar(50) DEFAULT NULL COMMENT '订单号',
+  `status` int DEFAULT '1' COMMENT '1:待付款 2:待接单 3:已配送 4:已完成 5:已取消',
+  `user_id` bigint NOT NULL COMMENT '下单用户ID',
+  `address_book_id` bigint DEFAULT NULL COMMENT '地址ID',
+  `order_time` datetime NOT NULL COMMENT '下单时间',
+  `checkout_time` datetime DEFAULT NULL COMMENT '结账时间',
+  `amount` decimal(10,2) NOT NULL COMMENT '实收金额',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
+  `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `consignee` varchar(255) DEFAULT NULL COMMENT '收货人',
+  `shop_id` bigint DEFAULT NULL COMMENT '所属店铺ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2001104113432043522 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +152,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (2000735664692338689,'饿了的同学',58.50,1,'2025-12-16 09:12:09'),(2000736978319003650,'饿了的同学',58.50,0,'2025-12-16 09:17:22'),(2001104113432043521,'微信用户',177.60,0,'2025-12-17 09:36:14');
+INSERT INTO `orders` VALUES (1,'KFC20251218001',4,2,NULL,'2025-12-18 19:54:58',NULL,39.90,NULL,'13800138000',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,6 +212,34 @@ INSERT INTO `product_flavor` VALUES (1,201,'饮料选择','[\"百事可乐\", \"
 UNLOCK TABLES;
 
 --
+-- Table structure for table `shop`
+--
+
+DROP TABLE IF EXISTS `shop`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shop` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL COMMENT '店铺名称',
+  `address` varchar(255) DEFAULT NULL COMMENT '店铺地址',
+  `status` int DEFAULT '1' COMMENT '1:营业中 0:休息中',
+  `open_hours` varchar(64) DEFAULT NULL COMMENT '营业时间 (如 07:00-22:00)',
+  `image` varchar(255) DEFAULT NULL COMMENT '店铺头图',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shop`
+--
+
+LOCK TABLES `shop` WRITE;
+/*!40000 ALTER TABLE `shop` DISABLE KEYS */;
+INSERT INTO `shop` VALUES (1,'广东海洋大学店','麻章区湖光镇海大路1号校内商业中心',1,'07:00-22:00','shop_school.jpg');
+/*!40000 ALTER TABLE `shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -231,6 +267,33 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,NULL,'普通食客小王',NULL,NULL,0,0.00),(2,NULL,'尊贵金卡老李',NULL,NULL,1,0.00);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `voucher`
+--
+
+DROP TABLE IF EXISTS `voucher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `voucher` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL COMMENT '所属用户',
+  `title` varchar(64) NOT NULL COMMENT '优惠券名',
+  `value` decimal(10,2) NOT NULL COMMENT '减免金额',
+  `status` int DEFAULT '0' COMMENT '0:未使用 1:已使用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `voucher`
+--
+
+LOCK TABLES `voucher` WRITE;
+/*!40000 ALTER TABLE `voucher` DISABLE KEYS */;
+INSERT INTO `voucher` VALUES (1,2,'新人立减券',5.00,0);
+/*!40000 ALTER TABLE `voucher` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -241,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-18 19:45:11
+-- Dump completed on 2025-12-18 20:03:14

@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3c1749c-1150-49b1-be92-1d83b85968c8" name="更改" comment="完成商品列表查询接口">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f3178e9b-0697-4635-84c9-3156c6392d7d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/f3178e9b-0697-4635-84c9-3156c6392d7d.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/project.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/project.config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +95,7 @@
       <workItem from="1765844050439" duration="9554000" />
       <workItem from="1765930215062" duration="601000" />
       <workItem from="1765934891838" duration="923000" />
-      <workItem from="1766057787998" duration="334000" />
+      <workItem from="1766057787998" duration="1481000" />
     </task>
     <task id="LOCAL-00001" summary="项目初始化">
       <option name="closed" value="true" />

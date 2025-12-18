@@ -89,11 +89,12 @@ DROP TABLE IF EXISTS `banner`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `banner` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `image` varchar(255) NOT NULL COMMENT '图片地址',
-  `url` varchar(255) DEFAULT NULL COMMENT '跳转链接',
+  `image` varchar(255) NOT NULL COMMENT '图片路径',
+  `name` varchar(255) DEFAULT NULL COMMENT '图片名称',
+  `sort` int DEFAULT '0' COMMENT '排序',
   `status` int DEFAULT '1' COMMENT '状态 1:启用 0:禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='轮播图';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +103,7 @@ CREATE TABLE `banner` (
 
 LOCK TABLES `banner` WRITE;
 /*!40000 ALTER TABLE `banner` DISABLE KEYS */;
-INSERT INTO `banner` VALUES (1,'banner1.jpg','/pages/activity/christmas',1),(2,'banner2.jpg','/pages/activity/newyear',1);
+INSERT INTO `banner` VALUES (1,'banner_christmas.jpg','圣诞快乐一桶拉满',1,1),(2,'banner_newyear.jpg','新年大吉大利',2,1);
 /*!40000 ALTER TABLE `banner` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,11 +116,17 @@ DROP TABLE IF EXISTS `category`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `type` int DEFAULT NULL COMMENT '类型 1:菜品分类 2:套餐分类',
+  `type` int DEFAULT NULL COMMENT '1:菜品分类 2:套餐分类',
   `name` varchar(64) NOT NULL COMMENT '分类名称',
-  `sort` int NOT NULL DEFAULT '0' COMMENT '顺序',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '排序',
+  `status` int DEFAULT '1' COMMENT '状态 1:启用 0:禁用',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `create_user` bigint DEFAULT NULL,
+  `update_user` bigint DEFAULT NULL,
+  `is_deleted` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='菜品及套餐分类';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +135,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (101,1,'人气热卖',1),(102,1,'冬日炸鸡店',2);
+INSERT INTO `category` VALUES (1,1,'人气热卖',1,1,NULL,NULL,NULL,NULL,0),(2,1,'超值套餐',2,1,NULL,NULL,NULL,NULL,0),(3,1,'主食',3,1,NULL,NULL,NULL,NULL,0),(4,1,'小食/配餐',4,1,NULL,NULL,NULL,NULL,0),(5,1,'甜品/饮料',5,1,NULL,NULL,NULL,NULL,0),(6,1,'儿童餐',6,1,NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,4 +381,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-18 20:38:24
+-- Dump completed on 2025-12-18 21:01:09

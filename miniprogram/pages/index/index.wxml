@@ -1,97 +1,71 @@
 <view class="container">
-  <!-- 顶部 Banner 背景 -->
-  <view class="banner-area">
-    <swiper class="banner-swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="{{3000}}" duration="{{500}}" circular="{{true}}">
+  <view class="header-area">
+    <swiper class="bg-swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="{{3000}}" duration="{{500}}" circular="{{true}}" indicator-active-color="#fff">
       <block wx:for="{{banners}}" wx:key="id">
         <swiper-item>
-          <image class="banner-img" src="{{item.image}}" mode="aspectFill"></image>
+          <image class="bg-image" src="{{item.image}}" mode="aspectFill"></image>
         </swiper-item>
       </block>
     </swiper>
-    <view class="privacy-tag">隐私政策 ></view>
+    
+    <view class="location-bar">
+      <text class="loc-icon">📍</text>
+      <text class="loc-text">{{shopInfo.address || '开启定位，获取附近餐厅'}}</text>
+      <text class="loc-btn">去开启 ></text>
+    </view>
   </view>
 
-  <!-- 悬浮卡片区 -->
-  <view class="card-container">
-    <!-- 用户信息卡 -->
-    <view class="user-card">
-      <view class="user-row">
-        <view class="user-left" bindtap="goToMe">
-          <image class="avatar" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
-          <text class="username">个人中心 ></text>
-        </view>
-        <view class="user-actions">
-          <view class="action-item" bindtap="goToMe">
-            <text class="icon">🏁</text>
-            <text>会员码</text>
+  <view class="content-layer">
+    
+    <view class="member-card" bindtap="goToMe">
+      <view class="user-info">
+        <image class="avatar" src="https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwBHdRxbS8yb4y7D9iaJqibv8K4FdG0yD8V5aQ/0"></image>
+        <view class="user-text">
+          <view class="welcome-row">
+            <text class="welcome">欢迎您，请登录</text>
+            <view class="qr-box"><text class="qr-icon">🏁</text></view>
           </view>
-          <view class="action-item" bindtap="goToMe">
-            <text class="icon">👛</text>
-            <text>卡包</text>
-          </view>
-          <view class="action-item" bindtap="goToMe">
-            <text class="icon">📋</text>
-            <text>订单</text>
+          <view class="assets-row">
+            <text>🪙 V金 -</text><text class="divider">|</text>
+            <text>🎫 卡券 -</text><text class="divider">|</text>
+            <text>💰 余额 -</text>
           </view>
         </view>
       </view>
+    </view>
+
+    <view class="main-action-area">
+      <view class="red-bg-layer"></view>
       
-      <!-- 门店信息 -->
-      <view class="store-info-row">
-        <view class="store-text">
-          <view class="store-title">
-            <text class="store-name">{{shopInfo.name || '正在加载门店...'}}</text>
-            <text class="arrow-down">▼</text>
+      <view class="action-grid">
+        <view class="action-item" bindtap="goToMenu">
+          <view class="circle-box">
+            <image class="icon-img-normal" src="/images/icon_waimaidaojia.png" mode="aspectFit"></image>
           </view>
-          <text class="store-address">{{shopInfo.address || '正在定位...'}}</text>
-          <text class="store-hours">营业时间: {{shopInfo.openHours || '暂无信息'}}</text>
-          <view class="store-tags">
-            <text class="tag">{{shopInfo.status===1?'营业中':'休息中'}}</text>
-          </view>
+          <text class="action-title">外送到家</text>
         </view>
-        <view class="store-img-wrap">
-          <image class="store-img" src="{{shopInfo.image ? '/images/'+shopInfo.image : 'https://img.yzcdn.cn/vant/cat.jpeg'}}"></image>
+
+        <view class="action-item center-item" bindtap="goToMenu">
+          <view class="circle-box-big">
+            <image class="icon-img-big" src="/images/icon_daodianziqu.png" mode="aspectFit"></image>
+          </view>
+          <text class="action-title big-title">到店自取</text>
+          <text class="action-sub">提前下单不排队</text>
+        </view>
+
+        <view class="action-item" bindtap="goToMenu">
+          <view class="circle-box">
+            <image class="icon-img-normal" src="/images/icon_coffee.png" mode="aspectFit"></image>
+          </view>
+          <text class="action-title">肯悦咖啡</text>
         </view>
       </view>
     </view>
 
-    <!-- 开始点餐按钮 -->
-    <view class="order-btn-area">
-      <button class="start-order-btn" bindtap="goToMenu">
-        <text class="btn-icon">🍴</text>
-        <view class="btn-text">
-          <text class="main-text">开始点餐</text>
-          <text class="sub-text">Order Now</text>
-        </view>
-      </button>
+    <view class="promo-banner">
+      <image class="wide-img" src="/images/banner3.jpg" mode="widthFix"></image>
     </view>
-
-    <!-- 底部大神卡广告 -->
-    <view class="promo-section">
-      <view class="promo-title">大神卡·早餐两件套6折起</view>
-      <view class="promo-cards">
-        <view class="promo-card">
-          <image class="food-img" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
-          <view class="promo-info">
-            <text class="food-name">乳酪花生云朵...</text>
-            <text class="vip-price">¥8.3</text>
-            <text class="orig-price">¥24.9</text>
-            <button class="add-mini">+</button>
-          </view>
-        </view>
-        <view class="promo-card">
-          <image class="food-img" src="https://img.yzcdn.cn/vant/cat.jpeg"></image>
-          <view class="promo-info">
-            <text class="food-name">芝士猪柳帕尼...</text>
-            <text class="vip-price">¥9.6</text>
-            <text class="orig-price">¥26</text>
-            <button class="add-mini">+</button>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="footer-text">已经到底部了</view>
+    
+    <view class="footer-spacer"></view>
   </view>
 </view>
-

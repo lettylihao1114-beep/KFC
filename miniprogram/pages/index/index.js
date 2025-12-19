@@ -2,8 +2,20 @@ const app = getApp()
 
 Page({
   data: {
-    banners: [],
-    shopInfo: null
+    // 👇 1. 这里换成了你的本地图片路径
+    banners: [
+      { id: 1, image: '/images/banner1.jpg' },
+      { id: 2, image: '/images/banner2.jpg' }
+    ],
+    
+    // 店铺信息 (保持不变)
+    shopInfo: {
+      name: 'KFC 肯德基 (校园实训店)',
+      status: 1,
+      address: '正在获取定位...',
+      openHours: '07:00-23:00',
+      image: '' 
+    }
   },
 
   onLoad() {
@@ -11,52 +23,51 @@ Page({
     this.fetchShopInfo();
   },
 
-  fetchShopInfo() {
+  fetchBanners() {
     const that = this;
+    if (!app.globalData.baseUrl) return;
+    
+    // 尝试从后端获取，如果失败或者没数据，就自动使用上面的本地图片兜底
     wx.request({
-      url: 'http://localhost:8080/shop/status',
+      url: `${app.globalData.baseUrl}/banner/list`,
       method: 'GET',
       success(res) {
-        if (res.statusCode === 200 && res.data) {
-          that.setData({ shopInfo: res.data });
-          // 存入全局，供下单使用
-          if (app.globalData) {
-            app.globalData.shop = res.data;
-          }
+        if (res.statusCode === 200 && res.data && res.data.length > 0) {
+          // 如果后端有数据，这里可以覆盖；或者你决定暂时只用本地图，这行可以注释掉
+           that.setData({ banners: res.data });
         }
-      },
-      fail(err) {
-        console.error('获取店铺信息失败', err);
       }
     });
   },
 
-  fetchBanners() {
+  fetchShopInfo() {
     const that = this;
+    if (!app.globalData.baseUrl) return;
+
     wx.request({
-      url: 'http://localhost:8080/banner/list',
+      url: `${app.globalData.baseUrl}/shop/status`,
       method: 'GET',
       success(res) {
         if (res.statusCode === 200 && res.data) {
-          that.setData({ banners: res.data });
+          that.setData({ shopInfo: res.data });
+          if (app.globalData) app.globalData.shop = res.data;
         }
       },
-      fail(err) {
-        console.error('获取轮播图失败', err);
+      fail() {
+        app.globalData.shop = { id: 1, name: '默认店铺' };
+        that.setData({
+          'shopInfo.address': '常用收货地址附近',
+          'shopInfo.name': 'KFC 肯德基 (默认店)'
+        });
       }
     });
   },
 
   goToMenu() {
-    wx.switchTab({
-      url: '/pages/menu/menu'
-    })
+    wx.switchTab({ url: '/pages/menu/menu' })
   },
 
   goToMe() {
-    wx.switchTab({
-      url: '/pages/me/me'
-    })
+    wx.switchTab({ url: '/pages/me/me' })
   }
 });
-

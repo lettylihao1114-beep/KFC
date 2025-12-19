@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 @Tag(name = "订单管理", description = "下单、支付、历史订单、商家接单")
 @RestController
@@ -31,6 +33,12 @@ public class OrderController {
     public String create(@RequestBody Orders orders) {
         orders.setOrderTime(LocalDateTime.now());
         orders.setStatus(1); // 1:待付款
+        
+        // 生成订单号: KFC + 年月日时分秒 + 4位随机数
+        String timeStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String randomStr = String.format("%04d", new Random().nextInt(10000));
+        orders.setNumber("KFC" + timeStr + randomStr);
+
         ordersMapper.insert(orders);
         return "下单成功，订单号：" + orders.getId();
     }

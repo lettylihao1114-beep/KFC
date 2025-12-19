@@ -42,5 +42,40 @@ Page({
         wx.showToast({ title: '网络错误', icon: 'none' });
       }
     });
+  },
+
+  payOrder(e) {
+    const orderId = e.currentTarget.dataset.id;
+    const that = this;
+    wx.showModal({
+      title: '支付确认',
+      content: '确定要支付该订单吗？',
+      success(res) {
+        if (res.confirm) {
+          wx.showLoading({ title: '支付中...' });
+          wx.request({
+            url: `http://localhost:8080/order/pay?orderId=${orderId}`,
+            method: 'POST',
+            success(payRes) {
+              wx.hideLoading();
+              if (payRes.statusCode === 200 && (payRes.data === '支付成功' || payRes.data.includes('成功'))) {
+                wx.showToast({ title: '支付成功', icon: 'success' });
+                // 刷新列表
+                const user = app.globalData.user;
+                if (user) {
+                   that.fetchOrders(user.id);
+                }
+              } else {
+                wx.showToast({ title: '支付失败', icon: 'none' });
+              }
+            },
+            fail() {
+              wx.hideLoading();
+              wx.showToast({ title: '网络错误', icon: 'none' });
+            }
+          });
+        }
+      }
+    });
   }
 })

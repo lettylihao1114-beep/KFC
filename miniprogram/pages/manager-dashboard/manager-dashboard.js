@@ -126,6 +126,7 @@ Page({
         if (res.confirm) {
           wx.showLoading({ title: '处理中...' });
           const token = wx.getStorageSync('token') || '';
+          console.log('Preparing to update status. ID:', id, 'Type:', typeof id);
           wx.request({
             url: `http://localhost:8080/order/admin/status?orderId=${id}&status=${status}`,
             method: 'PUT',
@@ -149,8 +150,20 @@ Page({
                 that.refreshAll();
               } else {
                 // 显示具体的错误信息，方便调试
-                const msg = (typeof res.data === 'string') ? res.data : '操作失败';
-                wx.showToast({ title: msg, icon: 'none' });
+                let msg = '操作失败';
+                if (typeof res.data === 'string') {
+                    msg = res.data;
+                } else if (res.data && res.data.error) {
+                    msg = res.data.error;
+                } else {
+                    msg = JSON.stringify(res.data);
+                }
+                console.error('Update failed:', msg);
+                wx.showModal({
+                    title: '操作失败',
+                    content: '错误信息: ' + msg,
+                    showCancel: false
+                });
               }
             },
             fail() {

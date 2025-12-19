@@ -34,3 +34,17 @@
   color: #d62f35;
   font-size: 34rpx;
 }
+
+.order-footer {
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1rpx solid #eee;
+  padding-top: 20rpx;
+}
+
+.pay-btn {
+  background-color: #d62f35;
+  color: #fff;
+  font-size: 26rpx;
+}

@@ -1,9 +1,32 @@
 <view class="container">
-  <view class="login-box">
-    <image class="logo" src="/images/logo.png" mode="aspectFit"></image> <view class="title">商家后台登录</view>
+  <view class="login-card">
+    <view class="title">商家后台管理</view>
+    <view class="subtitle">KFC Backend System</view>
     
-    <input class="input" type="password" placeholder="请输入管理员密码" bindinput="onInputPwd" />
-    
-    <button class="login-btn" bindtap="handleLogin">登录</button>
+    <view class="input-group">
+      <view class="label">账号</view>
+      <input 
+        class="input" 
+        placeholder="请输入管理员账号" 
+        placeholder-class="placeholder"
+        bindinput="onInputUsername" 
+        value="{{username}}" 
+      />
+    </view>
+
+    <view class="input-group">
+      <view class="label">密码</view>
+      <input 
+        class="input" 
+        password="true" 
+        type="text" 
+        placeholder="请输入登录密码" 
+        placeholder-class="placeholder"
+        bindinput="onInputPwd" 
+        value="{{password}}" 
+      />
+    </view>
+
+    <button class="login-btn" bindtap="handleLogin">立即登录</button>
   </view>
 </view>

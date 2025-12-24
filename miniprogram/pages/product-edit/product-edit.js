@@ -1,210 +1,142 @@
-const app = getApp()
+const app = getApp();
 
 Page({
   data: {
-    isEdit: false, // 标记是否为编辑模式
-    categories: [], // 分类列表
-    categoryIndex: -1, // 选中的分类索引
-
-    // 表单数据
-    formData: {
-      id: null,
-      name: '',
-      categoryId: '',
-      price: '',
-      image: '/images/banner1.jpg', // 默认给一张图，方便测试
-      description: '',
-      status: 1
-    }
+    id: null,
+    name: '',
+    category: '',
+    price: '',
+    description: '',
+    image: '', 
+    categories: ['主食', '小食', '甜品/饮料', '套餐'] 
   },
 
   onLoad(options) {
-    // 1. 先加载分类列表 (因为下拉框要用)
-    this.loadCategories().then(() => {
-      // 2. 如果页面参数里有 id，说明是编辑模式
-      if (options.id) {
-        wx.setNavigationBarTitle({
-          title: '编辑菜品'
-        });
-        this.setData({
-          isEdit: true
-        });
-        this.loadProductDetail(options.id);
-      } else {
-        wx.setNavigationBarTitle({
-          title: '新建菜品'
-        });
-      }
-    });
-  },
-
-  // 加载分类 (✨已修复：兼容 R 对象拆包)
-  loadCategories() {
-    return new Promise((resolve) => {
-      wx.request({
-        url: `${app.globalData.baseUrl}/category/list`,
-        success: (res) => {
-          // 如果后端返回 R 对象 {code:1, data: [...]}
-          if (res.data && res.data.code === 1) {
-            this.setData({
-              categories: res.data.data || []
-            });
-          } else {
-            // 兼容旧接口
-            this.setData({
-              categories: res.data || []
-            });
-          }
-          resolve();
-        }
-      });
-    });
-  },
-
-  // 加载商品详情 (用于回显)
-  loadProductDetail(id) {
-    wx.showLoading({
-      title: '加载详情...'
-    });
-    wx.request({
-      url: `${app.globalData.baseUrl}/product/${id}`,
-      success: (res) => {
-        wx.hideLoading();
-        // 兼容 R 对象
-        let product = null;
-        if (res.data && res.data.code === 1) {
-          product = res.data.data;
-        } else if (res.statusCode === 200) {
-          product = res.data;
-        }
-
-        if (product) {
-          // 找到当前分类的下标，为了让 picker 显示正确
-          const index = this.data.categories.findIndex(c => String(c.id) === String(product.categoryId || product.category_id));
-
+    // 1. 如果有 id，说明是编辑模式
+    if (options.id) {
+      // 2. 尝试获取传过来的完整数据
+      if (options.product) {
+        try {
+          const product = JSON.parse(decodeURIComponent(options.product));
+          
           this.setData({
-            formData: {
-              id: product.id,
-              name: product.name,
-              categoryId: product.categoryId || product.category_id,
-              price: product.price,
-              image: product.image,
-              description: product.description,
-              status: product.status
-            },
-            categoryIndex: index
+            id: product.id,
+            name: product.name,
+            category: product.category || product.categoryName, // 兼容字段
+            price: product.price,
+            description: product.description,
+            // 如果图片是 http 开头的网络图才显示，本地路径或者无效路径不显示
+            image: (product.image && product.image.startsWith('http')) ? product.image : '' 
           });
+          
+          wx.setNavigationBarTitle({ title: '编辑菜品' });
+        } catch (e) {
+          console.error('解析菜品数据失败', e);
         }
       }
-    });
+    } else {
+      wx.setNavigationBarTitle({ title: '新增菜品' });
+    }
   },
 
-  // 输入框通用处理
-  onInput(e) {
-    const field = e.currentTarget.dataset.field;
-    const value = e.detail.value;
-    this.setData({
-      [`formData.${field}`]: value
-    });
-  },
-
-  // 分类选择处理
+  // 输入事件绑定
+  onInputName(e) { this.setData({ name: e.detail.value }) },
+  onInputPrice(e) { this.setData({ price: e.detail.value }) },
+  onInputDesc(e) { this.setData({ description: e.detail.value }) },
+  
+  // 分类选择
   onCategoryChange(e) {
-    const index = e.detail.value;
-    const selectedCat = this.data.categories[index];
     this.setData({
-      categoryIndex: index,
-      'formData.categoryId': selectedCat.id
-    });
+      category: this.data.categories[e.detail.value]
+    })
   },
 
-  // ✨✨✨ 提交表单 (防呆版：无Token自动跳转) ✨✨✨
+  // 选择图片
+  chooseImage() {
+    const that = this;
+    wx.chooseImage({
+      count: 1, 
+      sizeType: ['compressed'], 
+      sourceType: ['album', 'camera'], 
+      success(res) {
+        const tempPath = res.tempFilePaths[0];
+        console.log('📸 已选择图片:', tempPath);
+        that.setData({ image: tempPath });
+      }
+    })
+  },
+
+  // ✨✨✨ 核心修复：提交保存 ✨✨✨
   submitForm() {
-    const data = this.data.formData;
+    const { id, name, category, price, description, image } = this.data;
+
+    if (!name || !price || !category) {
+      wx.showToast({ title: '请填写完整信息', icon: 'none' });
+      return;
+    }
+
+    const formData = {
+      id: id,
+      name: name,
+      category: category,
+      price: parseFloat(price),
+      description: description,
+      image: image 
+    };
+
+    // 🚨🚨🚨 关键修改：取 admin_token (管理员令牌)，而不是普通 token 🚨🚨🚨
+    const token = wx.getStorageSync('admin_token');
     
-    // 1. ✨ 核心检查：有没有 Token？
-    const token = wx.getStorageSync('token');
-    
+    // 如果没有管理员 Token，说明登录过期，踢回登录页
     if (!token) {
-        console.warn('【提交失败】缓存中没有Token');
-        wx.showModal({
-            title: '未登录',
-            content: '登录状态失效，请重新加载小程序以获取权限。',
-            showCancel: false,
-            confirmText: '去重新加载',
-            success: (res) => {
-                if(res.confirm) {
-                    // 强制重启小程序，触发 app.js 的自动登录逻辑
-                    wx.reLaunch({ url: '/pages/index/index' });
-                }
-            }
-        });
+        wx.showToast({ title: '登录过期，请重登', icon: 'none' });
+        setTimeout(() => {
+            // 使用 redirectTo 避免层级叠加
+            wx.redirectTo({ url: '/pages/admin-login/admin-login' });
+        }, 1500);
         return;
     }
 
-    // 2. 表单校验
-    if (!data.name) return wx.showToast({
-      title: '请填写菜名',
-      icon: 'none'
-    });
-    if (!data.categoryId) return wx.showToast({
-      title: '请选择分类',
-      icon: 'none'
-    });
-    if (!data.price) return wx.showToast({
-      title: '请填写价格',
-      icon: 'none'
-    });
+    const baseUrl = app.globalData.baseUrl;
+    // 有 id 调更新接口，没 id 调新增接口
+    const url = id ? `${baseUrl}/product/update` : `${baseUrl}/product/add`;
 
-    wx.showLoading({
-      title: '提交中...'
-    });
+    console.log(`🚀 正在提交到: ${url}`);
+    console.log('📦 携带管理员Token:', token);
 
-    const method = this.data.isEdit ? 'PUT' : 'POST';
-    const url = `${app.globalData.baseUrl}/product`;
-
-    // 3. 发送请求 (带上 Token)
     wx.request({
       url: url,
-      method: method,
-      data: data,
-      header: {
-        'token': token
-      },
-      success: (res) => {
-        wx.hideLoading();
-        console.log('【提交结果】', res);
+      method: 'POST', 
+      data: formData,
+      // ✨✨✨ 把真正的管理员 Token 给后端 ✨✨✨
+      header: { 
+          'content-type': 'application/json',
+          'token': token 
+      }, 
+      success(res) {
+        // 如果后端铁面无私还是报 401
+        if (res.statusCode === 401) {
+             wx.showToast({ title: '权限不足，请重新登录', icon: 'none' });
+             setTimeout(() => {
+                wx.redirectTo({ url: '/pages/admin-login/admin-login' });
+             }, 1500);
+             return;
+        }
 
-        // 4. 成功判断 (兼容 R 对象)
-        const isSuccess = res.statusCode === 200 && (res.data.code === 1 || res.data === '操作成功' || res.data === true);
-
-        if (isSuccess) {
-          wx.showToast({
-            title: '保存成功'
-          });
-          setTimeout(() => wx.navigateBack(), 1500);
+        if (res.statusCode === 200) {
+          wx.showToast({ title: '保存成功', icon: 'success' });
+          setTimeout(() => {
+            wx.navigateBack(); // 保存成功后自动返回上一页
+          }, 1500);
         } else {
-          // 失败详情
-          let errorMsg = '操作失败';
-          if(res.statusCode === 401) errorMsg = '权限不足 (401)';
-          else if(res.data && res.data.msg) errorMsg = res.data.msg;
-          else if(typeof res.data === 'string') errorMsg = res.data;
-
-          wx.showModal({
-            title: '保存失败',
-            content: errorMsg,
-            showCancel: false
-          });
+          console.error('保存失败:', res);
+          wx.showToast({ title: '保存失败', icon: 'error' });
         }
       },
-      fail: (err) => {
-        wx.hideLoading();
-        wx.showModal({
-          title: '网络连不上',
-          content: JSON.stringify(err),
-          showCancel: false
-        });
+      fail(err) {
+        console.error(err);
+        wx.showToast({ title: '网络错误', icon: 'none' });
       }
     });
   }
-})
+});

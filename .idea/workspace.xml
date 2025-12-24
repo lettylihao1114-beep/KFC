@@ -5,41 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3c1749c-1150-49b1-be92-1d83b85968c8" name="更改" comment="完成商品列表查询接口">
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/kfc人气三件套.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/kfc双人餐.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/九珍果汁.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/儿童餐a.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/全家桶.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/劲脆鸡腿堡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/可乐.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/吮指原味鸡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/工作日午餐.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/拿铁咖啡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/柠檬茶.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/热牛奶.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/牛堡套餐.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/红豆派.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/老北京鸡肉卷.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/至尊汉堡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/草莓圣代.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/葡式蛋挞.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/薯条.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/香辣鸡腿堡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/鳕鱼套餐.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/鸡米花.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/images/黄金脆皮鸡.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/images/大神卡.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/images/我的.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/images/点餐.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/images/首页.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/pages/register/register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/pages/register/register.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/pages/register/register.wxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/miniprogram/pages/register/register.wxss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/images/kele.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/pages/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/index/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/pages/index/index.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/index/index.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.json" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/admin-login/admin-login.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login-password/login-password.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login/login.json" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login/login.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login/login.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login/login.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/login/login.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/login/login.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/manager-dashboard/manager-dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/manager-dashboard/manager-dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/manager-dashboard/manager-dashboard.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/manager-dashboard/manager-dashboard.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/me/me.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/me/me.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/me/me.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/me/me.wxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/miniprogram/pages/me/me.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/me/me.wxss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniprogram/project.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/project.config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/product-edit/product-edit.wxss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/vip/vip.js" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/vip/vip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/vip/vip.wxml" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/vip/vip.wxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miniprogram/pages/vip/vip.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/miniprogram/pages/vip/vip.wxss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,35 +69,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "HTTP 请求.test中的所有.executor": "Run",
-    "Maven.backend [clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.KfcBackendApplication.executor": "Run",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "ms-17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/校内小程序实训/kfc_sys/backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;HTTP 请求.test中的所有.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.backend [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.KfcBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;ms-17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/校内小程序实训/kfc_sys/backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Spring Boot.KfcBackendApplication">
     <configuration name="test中的所有" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/backend/src/test.http">
       <method v="2" />
@@ -133,7 +131,8 @@
       <workItem from="1766057787998" duration="5269000" />
       <workItem from="1766125415481" duration="8633000" />
       <workItem from="1766384323042" duration="1069000" />
-      <workItem from="1766474317540" duration="2288000" />
+      <workItem from="1766474317540" duration="5787000" />
+      <workItem from="1766557235319" duration="4399000" />
     </task>
     <task id="LOCAL-00001" summary="项目初始化">
       <option name="closed" value="true" />

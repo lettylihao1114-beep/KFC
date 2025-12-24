@@ -61,7 +61,7 @@
   margin-top: 6rpx;
 }
 
-/* VIP Banner Bar */
+/* VIP Banner Bar (顶部横条) */
 .vip-banner-bar {
   background: #fff5f5;
   display: flex;
@@ -89,20 +89,23 @@
   border-radius: 20rpx;
 }
 
-/* VIP Card Area */
+/* VIP Card Area (核心卡片区域) */
 .vip-card-container {
   padding: 0 30rpx;
-  margin-top: -10rpx; /* overlap if needed, or just margin */
+  margin-top: -10rpx;
   margin-bottom: 20rpx;
-  background: #fff; /* header extend */
+  background: #fff;
   padding-bottom: 20rpx;
 }
 
+/* 默认卡片样式 (普通用户 - 浅金色/米色) */
 .vip-card {
   background: linear-gradient(135deg, #faeec7, #f3dcb1);
   border-radius: 16rpx;
   padding: 30rpx;
   box-shadow: 0 4rpx 10rpx rgba(220, 179, 114, 0.2);
+  /* 添加过渡效果，让切换更丝滑 */
+  transition: all 0.3s ease; 
 }
 
 .card-header {
@@ -155,7 +158,7 @@
   color: #5d401e;
 }
 
-/* Stats Card */
+/* Stats Card (数据统计) */
 .stats-card {
   background: #fff;
   margin: 20rpx 30rpx;
@@ -173,6 +176,7 @@
   font-size: 40rpx;
   font-weight: bold;
   color: #333;
+  font-family: 'DIN', sans-serif; /* 优化数字字体 */
 }
 
 .stat-unit {
@@ -200,7 +204,7 @@
   margin-right: 4rpx;
 }
 
-/* Menu Card */
+/* Menu Card (常用功能) */
 .menu-card {
   background: #fff;
   margin: 20rpx 30rpx;
@@ -247,11 +251,11 @@
   font-size: 28rpx;
 }
 
-/* ✨✨✨ 新增列表样式 (用于商家管理入口) ✨✨✨ */
+/* List Card (商家管理入口) */
 .list-card {
   background: #fff;
   border-radius: 16rpx;
-  margin: 20rpx 30rpx; /* 这里的左右 margin 保持和 stats-card 一致 */
+  margin: 20rpx 30rpx;
   padding: 0 30rpx;
 }
 
@@ -260,8 +264,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* 如果有多个条目，可以开启下边框 */
-  /* border-bottom: 1rpx solid #f5f5f5; */
 }
 
 .list-left {
@@ -282,4 +284,27 @@
 .list-arrow {
   font-size: 28rpx;
   color: #999;
+}
+
+/* ========================================= */
+/* ✨✨✨ 新增：VIP 黑金卡专属样式 ✨✨✨ */
+/* ========================================= */
+
+/* 1. 黑金卡背景覆盖 */
+.vip-card.black-gold {
+  background: linear-gradient(135deg, #2b2b2b, #000000);
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.3);
+  border: 1px solid #444;
+}
+
+/* 2. 金色文字 (用于标题、权益等) */
+.gold-text {
+  color: #e0cfa5 !important; /* 香槟金 */
+}
+
+/* 3. 金色按钮 (用于"会员权益"按钮) */
+.gold-btn {
+  background: #e0cfa5 !important;
+  color: #000 !important;
+  font-weight: bold;
 }

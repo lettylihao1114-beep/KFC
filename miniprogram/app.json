@@ -12,7 +12,8 @@
     "pages/login/login",
     "pages/login-code/login-code",
     "pages/login-password/login-password",
-    "pages/product-edit/product-edit"
+    "pages/product-edit/product-edit",
+    "pages/register/register" 
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -21,26 +22,34 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#666666",
+    "color": "#999999",
     "selectedColor": "#d62f35",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "images/首页.png",
+        "selectedIconPath": "images/首页.png"
       },
       {
         "pagePath": "pages/menu/menu",
-        "text": "点餐"
+        "text": "点餐",
+        "iconPath": "images/点餐.png",
+        "selectedIconPath": "images/点餐.png"
       },
       {
         "pagePath": "pages/vip/vip",
-        "text": "大神卡"
+        "text": "大神卡",
+        "iconPath": "images/大神卡.png",
+        "selectedIconPath": "images/大神卡.png"
       },
       {
         "pagePath": "pages/me/me",
-        "text": "我的"
+        "text": "我的",
+        "iconPath": "images/我的.png",
+        "selectedIconPath": "images/我的.png"
       }
     ]
   },

@@ -34,8 +34,7 @@ Page({
     }
   },
 
-  // ✨✨✨ 新增：跳转回用户端 (去点餐) ✨✨✨
-  // 对应 wxml 里的 bindtap="goToUserSide"
+  // ✨✨✨ 跳转回用户端 (去点餐) ✨✨✨
   goToUserSide() {
     console.log('正在返回点餐页...');
     // 使用 reLaunch 强制重启到首页，最稳妥
@@ -114,15 +113,18 @@ Page({
 
   requestList(status) {
     return new Promise((resolve) => {
-      const token = wx.getStorageSync('token') || '';
+      // 🚨🚨🚨 关键修改：使用 admin_token 🚨🚨🚨
+      const token = wx.getStorageSync('admin_token') || '';
+      
       wx.request({
         url: `${app.globalData.baseUrl}/order/admin/list?status=${status}`,
         header: {
-          'token': token
+          'token': token // 给后端看管理员工牌
         },
         dataType: 'text', // 防止精度丢失
         success: (res) => {
           if (res.statusCode === 401 || (typeof res.data === 'string' && res.data.includes('No Permission'))) {
+            // 如果没权限，resolve 空数组
             resolve([]);
             return;
           }
@@ -175,12 +177,15 @@ Page({
           wx.showLoading({
             title: '处理中...'
           });
-          const token = wx.getStorageSync('token') || '';
+          
+          // 🚨🚨🚨 关键修改：使用 admin_token 🚨🚨🚨
+          const token = wx.getStorageSync('admin_token') || '';
+          
           wx.request({
             url: `${app.globalData.baseUrl}/order/admin/status?orderId=${id}&status=${status}`,
             method: 'PUT',
             header: {
-              'token': token
+              'token': token // 给后端看管理员工牌
             },
             success(res) {
               wx.hideLoading();
@@ -288,6 +293,10 @@ Page({
   handleDelete(e) {
     const id = e.currentTarget.dataset.id;
     const that = this;
+    
+    // 🚨 获取 admin_token
+    const token = wx.getStorageSync('admin_token');
+
     wx.showModal({
       title: '警告',
       content: '确定要删除此商品吗？',
@@ -297,6 +306,10 @@ Page({
           wx.request({
             url: `${app.globalData.baseUrl}/product?ids=${id}`,
             method: 'DELETE',
+            // ✨✨✨ 补全 Header，防止 401 ✨✨✨
+            header: {
+                'token': token
+            },
             success(apiRes) {
               const isSuccess = apiRes.statusCode === 200 && (apiRes.data.code === 1 || apiRes.data === '删除成功');
               if (isSuccess) {
@@ -321,10 +334,17 @@ Page({
   toggleStatus(e) {
     const id = e.currentTarget.dataset.id;
     const newStatus = e.detail.value ? 1 : 0;
+    
+    // 🚨 获取 admin_token
+    const token = wx.getStorageSync('admin_token');
 
     wx.request({
       url: `${app.globalData.baseUrl}/product/status/${newStatus}?ids=${id}`,
       method: 'POST',
+      // ✨✨✨ 补全 Header，防止 401 ✨✨✨
+      header: {
+          'token': token
+      },
       success(res) {
         const isSuccess = res.statusCode === 200 && (res.data.code === 1 || res.data === '状态已更新');
         if (!isSuccess) {
@@ -352,11 +372,19 @@ Page({
     });
   },
 
-  // 跳转去编辑
+  // 跳转去编辑 (已包含数据回显逻辑)
   goToEdit(e) {
-    const id = e.currentTarget.dataset.id;
+    // 1. 拿到 wxml 里传过来的完整对象 (data-product)
+    const product = e.currentTarget.dataset.product;
+    
+    console.log('准备编辑:', product);
+
+    // 2. 转成字符串并编码 (防止中文乱码)
+    const productStr = encodeURIComponent(JSON.stringify(product));
+    
+    // 3. 跳转，带上 id 和 product 字符串
     wx.navigateTo({
-      url: `/pages/product-edit/product-edit?id=${id}`
+      url: `/pages/product-edit/product-edit?id=${product.id}&product=${productStr}`
     });
   }
 })

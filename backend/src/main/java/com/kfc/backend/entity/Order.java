@@ -1,18 +1,36 @@
 package com.kfc.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@TableName("orders") // 对应数据库里的 orders 表
+@TableName("orders")
 public class Order {
+
+    // === 1. 防止前端精度丢失 (必加) ===
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-    private String customerName; // 顾客名字
-    private BigDecimal totalPrice; // 总金额
-    private Integer status;      // 0:未支付, 1:已支付
+
+    // === 2. 关联下单的用户 (必加) ===
+    private Long userId;
+
+    // === 3. 字段统一：实付金额 (对应数据库 amount 或 total_price) ===
+    // 之前叫 totalPrice，为了配合 Controller 统一改为 amount
+    private BigDecimal amount;
+
+    // === 4. 核心字段：原价 (用于展示划线价格) ===
+    private BigDecimal originalAmount;
+
+    private String customerName; // 顾客名字 (保留)
+    private Integer status;      // 0:未支付, 1:已支付, 2:已完成
     private LocalDateTime createTime; // 下单时间
 
-    // ⚡️ 必做：在此处右键 -> 生成(Generate) -> Getter 和 Setter -> 全选 -> 确定
+    // ==========================================
+    //       Getter 和 Setter (已自动生成)
+    // ==========================================
 
     public Long getId() {
         return id;
@@ -22,20 +40,36 @@ public class Order {
         this.id = id;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public BigDecimal getOriginalAmount() {
+        return originalAmount;
+    }
+
+    public void setOriginalAmount(BigDecimal originalAmount) {
+        this.originalAmount = originalAmount;
+    }
+
     public String getCustomerName() {
         return customerName;
     }
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public Integer getStatus() {

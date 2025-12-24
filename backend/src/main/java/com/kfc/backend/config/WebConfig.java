@@ -1,6 +1,7 @@
 package com.kfc.backend.config;
 
 import com.kfc.backend.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -9,9 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    // 注入拦截器
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    /**
+     * 解决跨域问题
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // 允许所有跨域请求
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
@@ -19,40 +26,34 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
+    /**
+     * 配置拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**")
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**") // 默认拦截所有
                 .excludePathPatterns(
-                        // === 基础认证 ===
-                        "/auth/login",
-                        "/user/**",       // 用户登录相关
+                        // === 1. 核心放行：C端顾客接口 ===
+                        // 这一行非常关键！解决了 buyVip 报 401 的问题
+                        "/user/**",
 
-                        // === 商品与菜单 (店长管理 + 用户点餐) ===
-                        "/product",       // 增删改
-                        "/product/**",    // 查列表、详情
-                        "/category/**",   // 分类
+                        // === 2. 管理端登录 ===
+                        "/admin/employee/login",
+                        "/admin/employee/logout",
 
-                        // === ✨✨✨ 订单模块 (关键修复) ✨✨✨ ===
-                        // 之前你只放行了 user/list，导致 admin/list 被拦截
-                        // 现在直接全部放行，解决店长端 401 问题
-                        "/order/**",
+                        // === 3. 静态资源与公共接口 ===
+                        "/product/**",
+                        "/category/**",
+                        "/common/**",
+                        "/shop/status",
+                        "/shop/info", // 如果有店铺信息接口也建议放行
 
-                        // === 基础功能 ===
-                        "/banner/**",
-                        "/shop/**",
-                        "/shoppingCart/**",
-                        "/addressBook/**",
-
-                        // === 新功能 ===
-                        "/ai/**",         // AI 助手
-
-                        // === Swagger 文档 ===
+                        // === 4. Swagger 文档 ===
                         "/doc.html",
-                        "/swagger-ui.html",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/webjars/**"
+                        "/webjars/**",
+                        "/swagger-resources",
+                        "/v3/api-docs/**"
                 );
     }
 }

@@ -2,60 +2,73 @@ const app = getApp();
 
 Page({
   data: {
-    isAgreed: false
+    isAgreed: false // 协议勾选状态
   },
 
+  // 勾选/取消协议
   toggleAgree() {
-    this.setData({ isAgreed: !this.data.isAgreed });
+    this.setData({
+      isAgreed: !this.data.isAgreed
+    });
   },
 
+  // 1. 一键登录 (演示版：直接登录 test01)
   handleOneClickLogin() {
     if (!this.data.isAgreed) {
-      wx.showToast({ title: '请先同意协议', icon: 'none' });
-      return;
+      return wx.showToast({ title: '请先同意协议', icon: 'none' });
     }
 
-    wx.showLoading({ title: '登录中...' });
+    wx.showLoading({ title: '极速登录中...' });
     
-    // 调用 app.js 中的 login 方法 (复用现有逻辑)
-    // 但因为 app.login 是异步的但没返回 Promise，这里我们自己模拟一下或者改造 app.js
-    // 简单起见，这里直接发起请求，或者假设 app.login 成功后会更新 globalData
-    
-    // 我们可以直接调用 app.login()，但为了更好的 UX，最好能知道何时结束
-    // 这里简单拷贝 app.login 的逻辑过来，或者直接调用
-    
-    const that = this;
+    // 复用之前的 test01 登录逻辑
     wx.request({
-      url: 'http://localhost:8080/user/login?userId=1', // 默认登录ID=1
-      method: 'GET',
-      success(res) {
+      url: 'http://localhost:8080/user/login',
+      method: 'POST',
+      data: { username: 'test01', password: '123' },
+      success: (res) => {
         wx.hideLoading();
-        if (res.statusCode === 200 && res.data) {
-          app.globalData.user = res.data;
-          wx.showToast({ title: '登录成功', icon: 'success' });
-          setTimeout(() => {
-            wx.navigateBack();
-          }, 1500);
+        if (res.data.code === 1) {
+          app.globalData.user = res.data.data;
+          wx.setStorageSync('userInfo', res.data.data);
+          wx.showToast({ title: '登录成功' });
+          
+          // 延迟跳转
+          setTimeout(() => { 
+             wx.switchTab({ 
+               url: '/pages/index/index',
+               fail: () => { wx.reLaunch({ url: '/pages/index/index' }) } 
+             }) 
+          }, 1000);
         } else {
-          wx.showToast({ title: '登录失败', icon: 'none' });
+          wx.showToast({ title: '登录失败，请尝试密码登录', icon: 'none' });
         }
       },
-      fail() {
-        wx.hideLoading();
-        wx.showToast({ title: '网络错误', icon: 'none' });
+      fail: () => { 
+        wx.hideLoading(); 
+        wx.showToast({ title: '服务器连接失败', icon: 'none' }); 
       }
     });
   },
 
+  // 2. 跳转到手机验证码页
   goToMobileLogin() {
-    wx.navigateTo({
-      url: '/pages/login-code/login-code'
-    });
+    wx.navigateTo({ url: '/pages/login-code/login-code' });
   },
 
+  // 3. 跳转到账号密码登录页
   goToPasswordLogin() {
+    wx.navigateTo({ url: '/pages/login-password/login-password' });
+  },
+
+  // === 4. 关键修复：跳转到注册页 ===
+  goToRegister() {
+    console.log("准备跳转注册页..."); // 调试日志
     wx.navigateTo({
-      url: '/pages/login-password/login-password'
+      url: '/pages/register/register',
+      fail: (err) => {
+        console.error("跳转失败，请检查 app.json 是否注册了该页面", err);
+        wx.showToast({ title: '页面跳转失败', icon: 'none' });
+      }
     });
   }
 })

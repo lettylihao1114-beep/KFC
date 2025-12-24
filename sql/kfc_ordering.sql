@@ -65,6 +65,7 @@ CREATE TABLE `admin_user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL COMMENT '账号',
   `password` varchar(32) NOT NULL COMMENT '密码',
+  `name` varchar(32) DEFAULT NULL COMMENT '员工姓名',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -76,7 +77,7 @@ CREATE TABLE `admin_user` (
 
 LOCK TABLES `admin_user` WRITE;
 /*!40000 ALTER TABLE `admin_user` DISABLE KEYS */;
-INSERT INTO `admin_user` VALUES (1,'admin','123456');
+INSERT INTO `admin_user` VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','管理员');
 /*!40000 ALTER TABLE `admin_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,6 +189,7 @@ CREATE TABLE `orders` (
   `address` varchar(255) DEFAULT NULL COMMENT '地址',
   `consignee` varchar(255) DEFAULT NULL COMMENT '收货人',
   `shop_id` bigint DEFAULT NULL COMMENT '所属店铺ID',
+  `original_amount` decimal(10,2) DEFAULT NULL COMMENT '原价',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -198,7 +200,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'KFC20251218001',4,2,NULL,'2025-12-18 19:54:58',NULL,39.90,NULL,'13800138000',NULL,NULL,NULL);
+INSERT INTO `orders` VALUES (1,'KFC20251218001',4,2,NULL,'2025-12-18 19:54:58',NULL,39.90,NULL,'13800138000',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,6 +326,10 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(64) DEFAULT NULL COMMENT '密码',
+  `sex` varchar(2) DEFAULT NULL COMMENT '性别',
+  `status` int DEFAULT '1' COMMENT '状态 0:禁用 1:正常',
   `openid` varchar(64) DEFAULT NULL COMMENT '微信OpenID (唯一标识)',
   `nickname` varchar(64) DEFAULT NULL COMMENT '微信昵称',
   `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
@@ -332,7 +338,7 @@ CREATE TABLE `user` (
   `balance` decimal(10,2) DEFAULT '0.00' COMMENT '余额',
   `vip_expire_time` datetime DEFAULT NULL COMMENT '会员过期时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='C端顾客表';
+) ENGINE=InnoDB AUTO_INCREMENT=2003726510928773122 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='C端顾客表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -341,7 +347,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,NULL,'普通食客小王',NULL,NULL,0,0.00,NULL),(2,NULL,'尊贵金卡老李',NULL,NULL,1,0.00,'2026-01-01 00:00:00');
+INSERT INTO `user` VALUES (1,NULL,NULL,NULL,1,NULL,'普通食客小王',NULL,NULL,0,0.00,NULL),(2,NULL,NULL,NULL,1,NULL,'尊贵金卡老李',NULL,NULL,1,0.00,'2026-01-01 00:00:00'),(3,'test01','202cb962ac59075b964b07152d234b70','男',1,NULL,'测试用户','13800000000',NULL,1,0.00,'2026-05-23 15:20:03'),(2003726510928773121,'letty','92a549b7b424f497a388b2f6f6164704','1',1,NULL,'用户letty','13129220268',NULL,1,0.00,'2026-04-23 15:26:19');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -381,4 +387,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-18 21:01:09
+-- Dump completed on 2025-12-24 15:42:44

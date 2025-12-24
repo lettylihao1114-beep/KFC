@@ -1,47 +1,23 @@
 package com.kfc.backend.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.kfc.backend.entity.AdminUser;
-import com.kfc.backend.mapper.AdminUserMapper;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Tag(name = "登录管理", description = "用于获取Token通行证")
+/**
+ * 旧的登录控制器
+ * * 修改说明：
+ * 1. 核心业务逻辑（登录、注册）已经迁移到了 UserController.java。
+ * 2. 为了解决 "Ambiguous mapping" (接口冲突) 报错，删除了这里的所有 @PostMapping 方法。
+ * 3. 删除了 @RequestMapping("/user") 注解，防止路径冲突。
+ * 4. 必须保留 sessionMap，因为拦截器 (LoginCheckFilter) 需要引用 LoginController.sessionMap。
+ */
 @RestController
-@RequestMapping("/auth")
 public class LoginController {
 
-    // 📖 小本本：用来存放所有合法的 Token (在内存里)
-    public static Map<String, AdminUser> sessionMap = new HashMap<>();
+    // =======================================================
+    // ⚠️ 严禁删除！拦截器 (Interceptor) 正在引用此变量
+    // =======================================================
+    public static Map<String, Object> sessionMap = new ConcurrentHashMap<>();
 
-    @Autowired
-    private AdminUserMapper adminUserMapper;
-
-    @Operation(summary = "管理员登录")
-    @PostMapping("/login")
-    public String login(@RequestBody AdminUser loginUser) {
-        QueryWrapper<AdminUser> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", loginUser.getUsername());
-        wrapper.eq("password", loginUser.getPassword());
-
-        AdminUser user = adminUserMapper.selectOne(wrapper);
-
-        if (user == null) {
-            return "登录失败：账号或密码错误！"; // 这里的文字其实是给前端看的
-        }
-
-        // 生成通行证
-        String token = UUID.randomUUID().toString();
-
-        // ✨ 关键一步：把通行证记在小本本上！
-        sessionMap.put(token, user);
-
-        return token; // 直接返回 Token，方便前端提取
-    }
 }

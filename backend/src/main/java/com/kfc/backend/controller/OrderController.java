@@ -3,13 +3,16 @@ package com.kfc.backend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kfc.backend.entity.OrderDetail;
 import com.kfc.backend.entity.Orders;
+import com.kfc.backend.entity.User; // 导入 User 实体
 import com.kfc.backend.mapper.OrderDetailMapper;
 import com.kfc.backend.mapper.OrdersMapper;
+import com.kfc.backend.mapper.UserMapper; // 导入 UserMapper
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal; // 导入BigDecimal用于计算金额
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,19 +29,55 @@ public class OrderController {
     @Autowired
     private OrderDetailMapper orderDetailMapper;
 
+    // ✨✨✨ 1. 新增注入 UserMapper，用来查用户是不是 VIP ✨✨✨
+    @Autowired
+    private UserMapper userMapper;
+
     // =========== 🧑 C端 顾客接口 ===========
 
     @Operation(summary = "创建订单")
     @PostMapping("/create")
     public String create(@RequestBody Orders orders) {
+        // 1. 设置基础信息
         orders.setOrderTime(LocalDateTime.now());
         orders.setStatus(1); // 1:待付款
-        
+
         // 生成订单号: KFC + 年月日时分秒 + 4位随机数
         String timeStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String randomStr = String.format("%04d", new Random().nextInt(10000));
         orders.setNumber("KFC" + timeStr + randomStr);
 
+        // =======================================================
+        // ✨✨✨ 2. 核心修改：VIP打折逻辑 ✨✨✨
+        // =======================================================
+
+        // A. 获取前端传来的总金额（此时是原价）
+        BigDecimal originalPrice = orders.getAmount();
+        BigDecimal finalPrice = originalPrice;
+
+        // B. 先把原价存入 originalAmount 字段 (用于前端显示划线价格)
+        orders.setOriginalAmount(originalPrice);
+
+        // C. 查询当前下单用户
+        if (orders.getUserId() != null) {
+            User user = userMapper.selectById(orders.getUserId());
+
+            // D. 如果用户存在 且 是VIP (isVip == 1)
+            if (user != null && user.getIsVip() != null && user.getIsVip() == 1) {
+                // E. 打8折 (乘以 0.8)
+                BigDecimal discount = new BigDecimal("0.8");
+                finalPrice = originalPrice.multiply(discount);
+
+                // F. 保留2位小数 (四舍五入)
+                finalPrice = finalPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+            }
+        }
+
+        // G. 将最终计算好的价格（VIP价或原价）设回 amount
+        orders.setAmount(finalPrice);
+        // =======================================================
+
+        // 3. 保存订单到数据库
         ordersMapper.insert(orders);
         return "下单成功，订单号：" + orders.getId();
     }
@@ -65,7 +104,7 @@ public class OrderController {
         return ordersMapper.selectList(wrapper);
     }
 
-    // 👇👇👇 本次新增：顾客查看订单详情 (买了哪些汉堡) 👇👇👇
+    // 顾客查看订单详情
     @Operation(summary = "顾客端-查询订单详情")
     @GetMapping("/user/detail")
     public List<OrderDetail> userDetail(@RequestParam Long orderId) {

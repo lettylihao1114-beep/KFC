@@ -2,24 +2,27 @@
   <scroll-view scroll-y class="scroll">
     <view class="top-user">
       <view class="user-row" wx:if="{{userInfo}}">
-        <view class="avatar">👤</view>
+        <image class="avatar-img" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
         <view class="user-text">
-          <view class="name">{{userInfo.nickname}}</view>
-          <view class="sub" wx:if="{{userInfo.vipExpireTime}}">
-            有效期至：{{vipExpireText || userInfo.vipExpireTime}}
+          <view class="name">{{userInfo.nickname || userInfo.username}}</view>
+          
+          <view class="sub" wx:if="{{isVip}}">
+            尊贵的会员，有效期至：{{userInfo.vipExpireTime || '长期'}}
           </view>
           <view class="sub" wx:else>
-            当前状态：{{userInfo.isVip===1 ? '已开通大神卡' : '普通用户'}}
+            当前状态：普通用户
           </view>
         </view>
       </view>
+
       <view class="user-row" wx:else bindtap="goLogin">
-        <view class="avatar">👤</view>
+        <image class="avatar-img" src="/images/default-avatar.png" mode="aspectFill"></image>
         <view class="user-text">
-          <view class="name">请登录</view>
-          <view class="sub">登录后开通大神卡</view>
+          <view class="name">点击登录</view>
+          <view class="sub">登录后开通大神卡，尽享优惠</view>
         </view>
       </view>
+
       <view class="vip-title">大神卡</view>
     </view>
 
@@ -34,6 +37,7 @@
     <view class="section-title">会员类型</view>
 
     <view class="card-list">
+      
       <view class="card-item">
         <view class="card-header">
           <text class="card-name">月卡</text>
@@ -42,25 +46,28 @@
         <view class="card-body">
           <view class="card-text">30天大神卡权益</view>
           <view class="price-row">
-            <text class="price-now">¥19</text>
+            <text class="price-symbol">¥</text>
+            <text class="price-now">19</text>
           </view>
         </view>
-        <button class="btn buy" bindtap="onBuy" data-type="1">立即开通</button>
+        <button class="btn buy" bindtap="handleBuyVip" data-type="1">立即开通</button>
       </view>
 
       <view class="card-item">
         <view class="card-header">
           <text class="card-name">季卡</text>
-          <text class="card-tag">热门</text>
+          <text class="card-tag red">热门</text>
         </view>
         <view class="card-body">
           <view class="card-text">90天大神卡权益</view>
           <view class="price-row">
-            <text class="price-now">¥38</text>
+            <text class="price-symbol">¥</text>
+            <text class="price-now">38</text>
           </view>
         </view>
-        <button class="btn buy" bindtap="onBuy" data-type="2">立即开通</button>
+        <button class="btn buy" bindtap="handleBuyVip" data-type="2">立即开通</button>
       </view>
+
     </view>
   </scroll-view>
 </view>

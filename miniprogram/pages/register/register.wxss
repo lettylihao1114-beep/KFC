@@ -1,0 +1,74 @@
+.container {
+  padding: 40rpx;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.header {
+  margin-top: 40rpx;
+  margin-bottom: 60rpx;
+}
+
+.title {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.form-area {
+  margin-bottom: 60rpx;
+}
+
+.input-group {
+  border-bottom: 1rpx solid #f0f0f0;
+  padding: 24rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+}
+
+.input {
+  font-size: 32rpx;
+  height: 60rpx;
+  color: #333;
+}
+
+.btn-register {
+  background-color: #d81e06; /* KFC红 */
+  color: white;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 20rpx 0;
+  width: 100%;
+  box-shadow: 0 6rpx 16rpx rgba(216, 30, 6, 0.3);
+}
+
+.btn-register:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.highlight {
+  color: #d81e06;
+  font-weight: bold;
+  margin-left: 10rpx;
+}

@@ -16,19 +16,40 @@
   </view>
 
   <view class="store-header">
-    <view class="store-row">
-      <view class="store-name-wrap">
-        <text class="store-icon">🏢</text>
-        <text class="store-name">{{shop.name}}</text>
-        <text class="arrow-down">▼</text>
+    <!-- A. 外送头部 -->
+    <block wx:if="{{orderType === 'takeout'}}">
+      <view class="store-row">
+        <view class="store-name-wrap">
+          <image class="store-icon" src="/images/tab-order-active.png" style="width:40rpx;height:40rpx;margin-right:10rpx;"></image>
+          <text class="store-name">{{selectedAddress.detail || '请选择地址'}}</text>
+          <text class="arrow-down" bindtap="reselectAddress">▼</text>
+        </view>
+        <view class="reserve-btn" style="border-color:#d62f35;color:#d62f35;">预约</view>
       </view>
-      <button class="reserve-btn ai-btn" bindtap="showAIModal">✨ AI推荐</button>
-    </view>
-    <view class="store-meta">
-      <text class="tag">自取</text>
-      <text class="address">{{shop.address}}</text>
-      <text class="distance" wx:if="{{shop.distance}}">{{shop.distance}}</text>
-    </view>
+      <view class="store-meta">
+        <text class="tag">外送</text>
+        <text class="address">{{shop.name}} 配送</text>
+        <text class="distance">预计30分钟送达</text>
+      </view>
+    </block>
+
+    <!-- B. 自取头部 (原有) -->
+    <block wx:else>
+      <view class="store-row">
+        <view class="store-name-wrap">
+          <text class="store-icon">🏢</text>
+          <text class="store-name">{{shop.name}}</text>
+          <text class="arrow-down">▼</text>
+        </view>
+        <button class="reserve-btn ai-btn" bindtap="showAIModal">✨ AI推荐</button>
+      </view>
+      <view class="store-meta">
+        <text class="tag">自取</text>
+        <text class="address">{{shop.address}}</text>
+        <text class="distance" wx:if="{{shop.distance}}">{{shop.distance}}</text>
+      </view>
+    </block>
+
     <view class="menu-tabs">
       <text class="tab active">经典菜单</text>
       <text class="tab">大神卡</text>
@@ -214,6 +235,22 @@
             </view>
             <!-- 最终回复 -->
             <text user-select>{{item.content}}</text>
+
+            <!-- ✨ 推荐菜品卡片 -->
+            <view class="ai-recommends" wx:if="{{item.recommendations && item.recommendations.length > 0}}">
+                <block wx:for="{{item.recommendations}}" wx:key="id" wx:for-item="recProd">
+                    <view class="rec-card" catchtap="showSpec" data-item="{{recProd}}">
+                        <image class="rec-img" src="{{recProd.image}}" mode="aspectFill"></image>
+                        <view class="rec-info">
+                            <text class="rec-name">{{recProd.name}}</text>
+                            <view class="rec-bottom">
+                                <text class="rec-price">¥{{recProd.price}}</text>
+                                <view class="rec-add-btn">选购</view>
+                            </view>
+                        </view>
+                    </view>
+                </block>
+            </view>
           </view>
         </view>
       </block>

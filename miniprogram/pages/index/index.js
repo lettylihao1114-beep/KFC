@@ -19,21 +19,10 @@ Page({
       openHours: '07:00-23:00',
       hasLocation: false, // ✨ 新增：标记是否已成功定位
       image: '' 
-    },
-    baseUrl: app.globalData.baseUrl // ✨ 供 WXML 拼接图片地址
+    }
   },
 
   onLoad() {
-    // 0. 初始化默认轮播图地址 (防止本地图片被删除后裂图)
-    if (app.globalData.baseUrl) {
-        this.setData({
-            banners: [
-                { id: 1, image: `${app.globalData.baseUrl}/images/banner1.jpg` },
-                { id: 2, image: `${app.globalData.baseUrl}/images/banner2.jpg` }
-            ]
-        });
-    }
-
     // 1. 获取轮播图
     this.fetchBanners();
     // 2. 获取后端店铺状态
@@ -222,8 +211,37 @@ Page({
     });
   },
 
-  goToMenu() {
-    wx.switchTab({ url: '/pages/menu/menu' })
+  goToMenu(e) {
+    // 获取点击的类型：'dinein' (自取) 或 'takeout' (外送)
+    // 如果是从 tabBar 直接点进来，可能没有 e 或者 e.currentTarget.dataset.type
+    // 所以默认给 'dinein'
+    let type = 'dinein';
+    if (e && e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.type) {
+        type = e.currentTarget.dataset.type;
+    }
+
+    console.log('用户选择模式:', type);
+    
+    // 存入全局变量，供菜单页读取
+    if (app.globalData) {
+        app.globalData.orderType = type;
+    }
+
+    if (type === 'takeout') {
+      // 外送模式：先去选地址
+      // 检查是否有 token 或 user，如果没有先去登录（可选，这里先假设已登录或者在地址页处理）
+      wx.navigateTo({
+        url: '/pages/address/address?selectMode=true',
+        fail: (err) => {
+             console.error('跳转地址页失败', err);
+             // 兜底
+             wx.switchTab({ url: '/pages/menu/menu' });
+        }
+      });
+    } else {
+      // 自取模式：直接进菜单
+      wx.switchTab({ url: '/pages/menu/menu' });
+    }
   },
 
   goToMe() {

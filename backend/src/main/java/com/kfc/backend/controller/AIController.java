@@ -1,6 +1,10 @@
 package com.kfc.backend.controller;
 
 import com.kfc.backend.common.R;
+import com.kfc.backend.entity.Product;
+import com.kfc.backend.mapper.ProductMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
@@ -11,6 +15,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,6 +25,9 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequestMapping("/ai")
 public class AIController {
+
+    @Autowired
+    private ProductMapper productMapper;
 
     // 本地 GeminiCLI to API 服务配置
     // 默认密码为 pwd，如果你的本地服务修改了密码，请在这里同步修改
@@ -62,14 +70,19 @@ public class AIController {
             // 或者使用 x-goog-api-key 头部 (根据 README 两者皆可，Bearer 更通用)
             // headers.set("x-goog-api-key", API_PASSWORD);
 
+            // 获取菜单
+            List<Product> products = productMapper.selectList(new QueryWrapper<Product>().eq("status", 1));
+            String menuStr = products.stream().map(Product::getName).collect(Collectors.joining(", "));
+
             Map<String, Object> part = new HashMap<>();
             // 修改 Prompt：极简模式，强制 JSON
-            part.put("text", "用户想吃：" + query + "。\n" +
-                    "任务：从KFC菜单推荐1-2个组合。\n" +
+            part.put("text", "当前可用菜单：" + menuStr + "。\n" +
+                    "用户想吃：" + query + "。\n" +
+                    "任务：从上方菜单中推荐1-2个组合。请只推荐菜单里有的菜品。\n" +
                     "格式：必须是合法的 JSON。\n" +
-                    "内容：包含 reasoning (思考过程) 和 answer (最终中文推荐)。\n" +
+                    "内容：包含 reasoning (思考过程), answer (最终中文推荐回复), recommendations (推荐的菜品名称数组，必须与菜单中的名称完全一致)。\n" +
                     "JSON示例：\n" +
-                    "{\"reasoning\": \"...\", \"answer\": \"...\"}");
+                    "{\"reasoning\": \"...\", \"answer\": \"为您推荐...\", \"recommendations\": [\"香辣鸡腿堡\", \"可乐\"]}");
 
             Map<String, Object> content = new HashMap<>();
             content.put("role", "user"); // 👈 必须指定角色，否则报错 400

@@ -2,6 +2,7 @@ package com.kfc.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public class AddressBook implements Serializable {
     private String detail;      // 详细地址
     private String label;       // 标签(家/公司)
     private Integer isDefault;  // 1:默认 0:否
+
+    @TableLogic
+    private Integer isDeleted;  // 逻辑删除
 
     // 自动填充时间
     @TableField(fill = FieldFill.INSERT)
@@ -43,6 +47,8 @@ public class AddressBook implements Serializable {
     public void setLabel(String label) { this.label = label; }
     public Integer getIsDefault() { return isDefault; }
     public void setIsDefault(Integer isDefault) { this.isDefault = isDefault; }
+    public Integer getIsDeleted() { return isDeleted; }
+    public void setIsDeleted(Integer isDeleted) { this.isDeleted = isDeleted; }
     public LocalDateTime getCreateTime() { return createTime; }
     public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
     public LocalDateTime getUpdateTime() { return updateTime; }

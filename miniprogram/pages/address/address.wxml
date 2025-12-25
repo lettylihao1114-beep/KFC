@@ -4,7 +4,7 @@
       <view class="empty-tip">暂无地址，请先新增</view>
     </block>
     <block wx:for="{{addressList}}" wx:key="id">
-      <view class="addr-item">
+      <view class="addr-item" bindtap="selectAddress" bindlongpress="onLongPressAddress" data-item="{{item}}">
         <view class="addr-main">
           <view class="row">
             <text class="name">{{item.consignee}}</text>

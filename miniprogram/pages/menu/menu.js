@@ -37,27 +37,64 @@ Page({
     aiQuery: '',
     chatHistory: [],
     aiLoading: false,
-    toViewMsg: ''
+    toViewMsg: '',
+
+    // ✨✨✨ 新增：订单类型和地址 ✨✨✨
+    orderType: 'dinein', // 'dinein' 自取 | 'takeout' 外送
+    selectedAddress: null
   },
 
   onLoad() {
+    // 1. 获取屏幕高度等
     const sysInfo = wx.getSystemInfoSync();
     this.setData({
-      statusBarHeight: sysInfo.statusBarHeight
+      statusBarHeight: sysInfo.statusBarHeight + 44 
     });
 
+    // 2. 加载店铺信息
+    if (app.globalData.shop) {
+      this.setData({ shop: app.globalData.shop });
+    }
+
+    // 3. ✨ 获取点餐模式 (自取/外送)
+    if (app.globalData.orderType) {
+        this.setData({ orderType: app.globalData.orderType });
+    }
+
+    // 4. ✨ 获取外送地址
+    if (app.globalData.selectedAddress) {
+        this.setData({ selectedAddress: app.globalData.selectedAddress });
+    }
+
+    // 5. 加载数据
     this.initData();
     this.fetchCartList();
   },
 
   onShow() {
-    if (app.globalData.shop) {
-      this.setData({
-        shop: app.globalData.shop
+      // 每次显示时，重新检查全局变量是否有变化
+      const updates = {};
+      if (app.globalData.shop) {
+          updates.shop = app.globalData.shop;
+      }
+      if (app.globalData.orderType && app.globalData.orderType !== this.data.orderType) {
+          updates.orderType = app.globalData.orderType;
+      }
+      if (app.globalData.selectedAddress) {
+          updates.selectedAddress = app.globalData.selectedAddress;
+      }
+      if (Object.keys(updates).length > 0) {
+          this.setData(updates);
+      }
+      // 每次显示页面刷新购物车，防止在其他页面加购后不同步
+      this.fetchCartList();
+  },
+
+  // ✨✨✨ 重新选地址 ✨✨✨
+  reselectAddress() {
+      wx.navigateTo({
+          url: '/pages/address/address?selectMode=true'
       });
-    }
-    // 每次显示页面刷新购物车，防止在其他页面加购后不同步
-    this.fetchCartList();
   },
 
   // ✨✨✨ 1. 核心：计算右侧每个分类的高度 ✨✨✨
@@ -367,6 +404,7 @@ Page({
 
         let reply = 'AI 似乎开小差了...';
         let reasoning = '';
+        let recommendedProducts = [];
 
         if (res.data && res.data.code === 1) {
           const rawText = res.data.data;
@@ -382,6 +420,15 @@ Page({
                 if (aiObj.answer) {
                     reply = aiObj.answer;
                     reasoning = aiObj.reasoning || '';
+
+                    // ✨ 处理推荐菜品
+                    if (aiObj.recommendations && Array.isArray(aiObj.recommendations)) {
+                        const allProds = that.data.allProducts;
+                        recommendedProducts = aiObj.recommendations.map(name => {
+                            // 模糊匹配或精确匹配
+                            return allProds.find(p => p.name === name || p.name.includes(name));
+                        }).filter(p => p); // 过滤掉未找到的
+                    }
                 } else {
                     // 如果 JSON 结构不对，当做普通文本
                     reply = rawText;
@@ -405,7 +452,8 @@ Page({
             role: 'assistant', 
             content: reply, 
             reasoning: reasoning, 
-            showThinking: false 
+            showThinking: false,
+            recommendations: recommendedProducts
         });
         
         that.setData({
@@ -635,71 +683,39 @@ Page({
     const that = this;
     const user = app.globalData.user;
     const shop = app.globalData.shop;
+    
+    // 1. 登录校验
     if (!user) {
-      wx.showToast({
-        title: '请先登录',
-        icon: 'none'
-      });
+      wx.showToast({ title: '请先登录', icon: 'none' });
       return;
     }
+    // 2. 购物车校验
     if (this.data.cartList.length === 0) {
-      wx.showToast({
-        title: '购物车为空',
-        icon: 'none'
-      });
+      wx.showToast({ title: '购物车为空', icon: 'none' });
       return;
     }
-    wx.showLoading({
-      title: '正在提交订单...'
-    });
-    const orderData = {
-      userId: user.id,
-      amount: parseFloat(this.data.totalPrice),
-      shopId: shop ? shop.id : 1
-    };
-    wx.request({
-      url: `${app.globalData.baseUrl}/order/create`,
-      method: 'POST',
-      data: orderData,
-      success(res) {
-        wx.hideLoading();
-        // ✨ 兼容 R 对象判断
-        if (res.statusCode === 200) {
-          let responseData = res.data;
-          // 如果返回的是 R 对象
-          if (responseData && responseData.code === 1) {
-            responseData = responseData.data;
-          }
+    // 3. 外送模式下地址校验
+    if (this.data.orderType === 'takeout' && !this.data.selectedAddress) {
+      wx.showToast({ title: '请选择收货地址', icon: 'none' });
+      return;
+    }
 
-          const responseMsg = typeof responseData === 'string' ? responseData : JSON.stringify(responseData);
-          // 提取订单ID (假设返回字符串包含数字ID)
-          const match = responseMsg.match(/(\d+)/);
-          if (match) {
-            that.payOrder(match[0]);
-          } else {
-            wx.showModal({
-              title: '下单成功',
-              content: responseMsg,
-              showCancel: false,
-              success() {
-                that.clearCart();
-              }
-            });
-          }
-        } else {
-          wx.showToast({
-            title: '下单失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail() {
-        wx.hideLoading();
-        wx.showToast({
-          title: '网络错误',
-          icon: 'none'
-        });
-      }
+    // ✨✨✨ 准备订单确认页数据 ✨✨✨
+    const orderPreview = {
+        cartList: this.data.cartList,
+        totalPrice: this.data.totalPrice,
+        orderType: this.data.orderType,
+        shop: shop,
+        address: this.data.selectedAddress, // 外送地址
+        user: user
+    };
+
+    // 存入全局，方便下一个页面读取 (因为数据量大，不适合 url 传参)
+    app.globalData.orderPreview = orderPreview;
+
+    // 跳转到订单确认页
+    wx.navigateTo({
+        url: '/pages/order-confirm/order-confirm'
     });
   },
   payOrder(orderId) {

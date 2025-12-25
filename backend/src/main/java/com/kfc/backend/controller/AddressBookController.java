@@ -62,4 +62,11 @@ public class AddressBookController {
         queryWrapper.eq(AddressBook::getIsDefault, 1);
         return addressBookMapper.selectOne(queryWrapper);
     }
+
+    @Operation(summary = "删除地址")
+    @DeleteMapping
+    public String delete(@RequestParam Long id) {
+        addressBookMapper.deleteById(id);
+        return "删除成功";
+    }
 }

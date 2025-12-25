@@ -21,10 +21,15 @@ public class BannerController {
     @Operation(summary = "获取首页轮播图")
     @GetMapping("/list")
     public List<Banner> list() {
-        // 只查询 status = 1 (启用) 的图片
-        QueryWrapper<Banner> wrapper = new QueryWrapper<>();
-        wrapper.eq("status", 1);
-        return bannerMapper.selectList(wrapper);
+        try {
+            // 只查询 status = 1 (启用) 的图片
+            QueryWrapper<Banner> wrapper = new QueryWrapper<>();
+            wrapper.eq("status", 1);
+            return bannerMapper.selectList(wrapper);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of(); // 返回空列表，防止报错
+        }
     }
 
     // --- 后台管理接口 (需要Token) ---

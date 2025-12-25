@@ -63,7 +63,7 @@
         <view class="action-item" bindtap="goToMenu" data-type="takeout">
           <view class="circle-box">
              <!-- 如果你有外卖图标可以换，没有就先用文字代替或保留原样 -->
-             <image class="icon-img-normal" src="/images/tab-order-active.png"></image>
+             <image class="icon-img-normal" src="/images/icon_waimaidaojia.png"></image>
           </view>
           <text class="action-title">外送</text>
           <text class="action-sub">最快30分钟</text>
@@ -72,7 +72,7 @@
         <!-- 2. 到店自取 (中间大圆) -->
         <view class="action-item center-item" bindtap="goToMenu" data-type="dinein">
           <view class="circle-box-big">
-            <image class="icon-img-big" src="/images/tab-home-active.png"></image>
+            <image class="icon-img-big" src="/images/icon_daodianziqu.png"></image>
           </view>
           <text class="action-title big-title">到店自取</text>
           <text class="action-sub">极速免排队</text>
@@ -81,9 +81,10 @@
         <!-- 3. 咖啡/其他 -->
         <view class="action-item" bindtap="goToMenu" data-type="dinein">
           <view class="circle-box">
-            <image class="icon-img-normal" src="/images/k-coffee.png"></image>
+            <image class="icon-img-normal" src="/images/icon_coffee.png"></image>
           </view>
           <text class="action-title">K咖啡</text>
+
           <text class="action-sub">现磨咖啡</text>
         </view>
       </view>

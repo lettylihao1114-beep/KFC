@@ -30,4 +30,4 @@ springdoc:
 
 # 自定义配置
 reggie:
-  path: D:/实训/images/
+  path: D:/实训/ordering-system/backend/src/main/resources/static/images/

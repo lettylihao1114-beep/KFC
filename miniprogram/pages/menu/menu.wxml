@@ -20,7 +20,7 @@
     <block wx:if="{{orderType === 'takeout'}}">
       <view class="store-row">
         <view class="store-name-wrap">
-          <image class="store-icon" src="/images/tab-order-active.png" style="width:40rpx;height:40rpx;margin-right:10rpx;"></image>
+          <image class="store-icon" src="/images/icon_waimaidaojia.png" style="width:40rpx;height:40rpx;margin-right:10rpx;"></image>
           <text class="store-name">{{selectedAddress.detail || '请选择地址'}}</text>
           <text class="arrow-down" bindtap="reselectAddress">▼</text>
         </view>

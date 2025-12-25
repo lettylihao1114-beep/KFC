@@ -51,7 +51,14 @@ public class AIController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error(e.getMessage());
+            // ✨ 降级处理：如果 AI 服务不可用（如网络超时），返回模拟数据供演示
+            System.out.println("AI服务调用失败，使用模拟数据: " + e.getMessage());
+            String mockResponse = "{\n" +
+                    "  \"reasoning\": \"(模拟) 检测到 AI 服务连接失败，自动降级为模拟回复。用户查询: " + query + "\",\n" +
+                    "  \"answer\": \"(模拟) 抱歉，AI 服务暂时开小差了。不过根据您的口味，为您推荐我们的招牌：香辣鸡腿堡和冰镇可乐！\",\n" +
+                    "  \"recommendations\": [\"香辣鸡腿堡\", \"冰镇可乐(中)\"]\n" +
+                    "}";
+            return R.success(mockResponse);
         }
     }
 

@@ -275,8 +275,16 @@ Page({
       const processedList = prods.map(item => {
         const cid = item.categoryId || item.category_id;
         const cat = cats.find(c => String(c.id) === String(cid));
+        
+        // ✨✨✨ 修复图片路径：加上 baseUrl ✨✨✨
+        let img = item.image;
+        if (img && !img.startsWith('http') && !img.startsWith('cloud://')) {
+            img = `${app.globalData.baseUrl}${img.startsWith('/') ? '' : '/'}${img}`;
+        }
+
         return {
           ...item,
+          image: img,
           categoryName: cat ? cat.name : '未分类',
           status: Number(item.status)
         };

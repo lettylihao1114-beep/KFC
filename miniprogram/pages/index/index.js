@@ -5,11 +5,8 @@ Page({
     // 1. 用户状态 (默认为 null)
     user: null,
 
-    // 2. 轮播图 (✨✨✨ 修改：默认使用本地图片兜底，防止接口不通时裂图 ✨✨✨)
-    banners: [
-      { id: 1, image: '/images/banner1.jpg' },
-      { id: 2, image: '/images/banner2.jpg' } // 如果你有第二张图的话
-    ],
+    // 2. 轮播图 (✨✨✨ 修改：默认为空，等待接口加载或使用兜底逻辑 ✨✨✨)
+    banners: [],
 
     // 3. 店铺信息 (支持定位状态)
     shopInfo: {
@@ -161,14 +158,42 @@ Page({
         
         // 情况A：后端返回了标准的 R 对象 (code === 1)
         if (res.statusCode === 200 && res.data && res.data.code === 1) {
-           const list = res.data.data;
+           let list = res.data.data;
            if (list && list.length > 0) {
+               // ✨ 统一处理图片路径：如果是相对路径，加上 baseUrl
+               list = list.map(item => {
+                   if (item.image && !item.image.startsWith('http')) {
+                       item.image = `${app.globalData.baseUrl}${item.image.startsWith('/') ? '' : '/'}${item.image}`;
+                   }
+                   return item;
+               });
                that.setData({ banners: list });
            }
         } 
         // 情况B：后端直接返回了数组 (兼容旧写法)
-        else if (res.statusCode === 200 && Array.isArray(res.data) && res.data.length > 0) {
-            that.setData({ banners: res.data });
+        else if (res.statusCode === 200 && Array.isArray(res.data)) {
+            let list = res.data;
+            if (list.length > 0) {
+                // ✨ 统一处理图片路径
+                list = list.map(item => {
+                    if (item.image && !item.image.startsWith('http')) {
+                        item.image = `${app.globalData.baseUrl}${item.image.startsWith('/') ? '' : '/'}${item.image}`;
+                    }
+                    return item;
+                });
+                that.setData({ banners: list });
+            } else {
+                // 如果返回空数组，也显示兜底图 (改为显示默认的3张轮播图)
+                // ✨ 增加随机参数 v=... 强制刷新缓存
+                const timestamp = new Date().getTime();
+                that.setData({
+                    banners: [
+                        { id: 991, image: `${app.globalData.baseUrl}/images/banner1.jpg?v=${timestamp}` },
+                        { id: 992, image: `${app.globalData.baseUrl}/images/banner2.jpg?v=${timestamp}` },
+                        { id: 993, image: `${app.globalData.baseUrl}/images/banner3.jpg?v=${timestamp}` }
+                    ]
+                });
+            }
         }
       },
       fail(err) {

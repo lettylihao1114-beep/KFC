@@ -12,11 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.io.File;
+import org.springframework.beans.factory.annotation.Value;
 
 @Tag(name = "产品管理", description = "包含小程序点餐和后台管理的所有接口")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
+    @Value("${reggie.path}")
+    private String basePath;
 
     @Autowired
     private ProductMapper productMapper;
@@ -137,5 +142,51 @@ public class ProductController {
             productMapper.updateById(p);
         }
         return R.success("状态已更新");
+    }
+
+    /**
+     * 临时修复接口：修复数据库中错误的图片路径
+     */
+    @GetMapping("/fixImages")
+    public R<String> fixImages() {
+        List<Product> list = productMapper.selectList(null);
+        int count = 0;
+        // 使用一个已知的存在的图片作为兜底
+        String defaultImg = "cdd10f5f-662a-48e8-a9a6-3699ee4a454c.jpg";
+
+        for (Product p : list) {
+            boolean changed = false;
+            String img = p.getImage();
+
+            if (img == null || img.trim().isEmpty()) {
+                p.setImage(defaultImg);
+                changed = true;
+            } else {
+                // 1. 如果是 http 开头（无论是 localhost 还是外链），只取文件名
+                if (img.startsWith("http")) {
+                    int lastSlash = img.lastIndexOf("/");
+                    if (lastSlash != -1) {
+                        img = img.substring(lastSlash + 1);
+                        p.setImage(img);
+                        changed = true;
+                    }
+                }
+
+                // 2. 检查磁盘上是否存在该文件
+                // 注意：basePath 已经在 application.yml 配置为 D:/实训/images/
+                File f = new File(basePath + p.getImage());
+                if (!f.exists()) {
+                    // 文件不存在，重置为兜底图
+                    p.setImage(defaultImg);
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                productMapper.updateById(p);
+                count++;
+            }
+        }
+        return R.success("修复完成，共修复 " + count + " 个商品图片");
     }
 }

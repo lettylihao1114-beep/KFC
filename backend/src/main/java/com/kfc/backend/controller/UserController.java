@@ -1,5 +1,22 @@
 package com.kfc.backend.controller;
 
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kfc.backend.common.R;
@@ -7,29 +24,88 @@ import com.kfc.backend.entity.User;
 import com.kfc.backend.entity.Voucher;
 import com.kfc.backend.mapper.UserMapper;
 import com.kfc.backend.mapper.VoucherMapper;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal; // === 记得导入这个包 ===
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 @Tag(name = "C端顾客接口", description = "处理顾客登录、注册、查身份、查卡包、开通会员")
 @RestController
 @RequestMapping("/user")
-@Slf4j
 public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private VoucherMapper voucherMapper;
+
+    /**
+     * 发送手机验证码
+     */
+    @Operation(summary = "发送手机验证码")
+    @PostMapping("/sendMsg")
+    public R<String> sendMsg(@RequestBody Map<String, String> map, HttpSession session) {
+        String phone = map.get("phone");
+        if (phone != null && !phone.isEmpty()) {
+            // 1. 生成随机4位验证码
+            String code = String.valueOf((int)((Math.random() * 9 + 1) * 1000));
+            
+            // 2. 打印到控制台 (关键点)
+            log.info("【验证码】手机号: {}, 验证码: {}", phone, code);
+            System.out.println("【验证码】手机号: " + phone + ", 验证码: " + code);
+
+            // 3. 保存到 Session
+            session.setAttribute(phone, code);
+
+            return R.success("验证码发送成功");
+        }
+        return R.error("短信发送失败");
+    }
+
+    /**
+     * 手机验证码登录
+     */
+    @Operation(summary = "手机验证码登录")
+    @PostMapping("/loginByPhone")
+    public R<User> loginByPhone(@RequestBody Map<String, String> map, HttpSession session) {
+        log.info("手机验证码登录: {}", map);
+
+        String phone = map.get("phone");
+        String code = map.get("code");
+
+        // 1. 从 Session 获取保存的验证码
+        Object sessionCode = session.getAttribute(phone);
+
+        // 2. 比对验证码
+        if (sessionCode != null && sessionCode.equals(code)) {
+            // 验证通过
+
+            // 3. 判断当前手机号是否为新用户
+            LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(User::getPhone, phone);
+            User user = userMapper.selectOne(queryWrapper);
+
+            if (user == null) {
+                // 新用户自动注册
+                user = new User();
+                user.setPhone(phone);
+                user.setUsername(phone); // 默认账号为手机号
+                user.setNickname("用户" + phone.substring(7)); // 默认昵称
+                user.setStatus(1);
+                user.setIsVip(0);
+                user.setBalance(BigDecimal.ZERO);
+                userMapper.insert(user);
+            }
+
+            // 4. 返回用户信息
+            return R.success(user);
+        }
+
+        return R.error("验证码错误");
+    }
 
     /**
      * 顾客登录接口 (适配前端 POST JSON)
